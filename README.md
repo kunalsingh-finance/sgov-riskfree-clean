@@ -1,6 +1,6 @@
 # SGOV 6-Month Risk-Free Proxy
 
-Professional course submission project for computing a 6-month risk-free return proxy from SGOV ETF prices.
+project for computing a 6-month risk-free return proxy from SGOV ETF prices.
 
 ## Stage-by-Stage Method
 
