@@ -1,5 +1,5 @@
 """
-Build a professional PDF submission report from SGOV 6M outputs.
+Build a PDF submission report from SGOV 6M outputs.
 
 The report includes:
 - Project summary and stage-by-stage methodology
@@ -48,6 +48,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def require_file(path: Path) -> Path:
+    # Fail fast with a clear message when expected pipeline outputs are missing.
     if not path.exists():
         raise SystemExit(f"Required file not found: {path}")
     return path
@@ -133,6 +134,7 @@ def main() -> None:
     full_csv = require_file(out_dir / "sgov_rf_6m.csv")
     sample_output_path = require_file(project_dir / "sample_output.txt")
 
+    # Latest snapshot is used on the overview page.
     latest_df = pd.read_csv(latest_csv)
     if latest_df.empty:
         raise SystemExit(f"No rows found in {latest_csv}")
@@ -141,6 +143,7 @@ def main() -> None:
     latest_date = str(latest_row["Date"])
     latest_value = float(latest_row["rf_6m_simple_clipped"])
 
+    # Full history is used for the time-series chart page.
     full_df = pd.read_csv(full_csv)
     if full_df.empty:
         raise SystemExit(f"No rows found in {full_csv}")

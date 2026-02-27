@@ -1,6 +1,6 @@
 # SGOV 6-Month Risk-Free Proxy
 
-project for computing a 6-month risk-free return proxy from SGOV ETF prices.
+Project for computing a 6-month risk-free return proxy from SGOV ETF prices.
 
 ## Stage-by-Stage Method
 
@@ -21,7 +21,7 @@ project for computing a 6-month risk-free return proxy from SGOV ETF prices.
 
 4. Stage 4 - Reporting
 - Print final summary in terminal.
-- Generate a professional PDF submission report.
+- Generate a PDF submission report.
 
 ## Files Included
 
@@ -55,6 +55,13 @@ Optional authorship line customization:
 
 ```bash
 python build_submission_report.py --project-dir . --author "Your Name" --declaration "I confirm this code and analysis were prepared by me for course submission."
+```
+
+## Verify Run
+
+```bash
+python sgov_rf_6m.py --start 2024-01-01 --end 2026-02-12 --window 126 --out out --plot
+python build_submission_report.py --project-dir . --author "Your Name"
 ```
 
 ## Output Files

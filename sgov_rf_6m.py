@@ -82,6 +82,7 @@ def compute_rf_6m(df: pd.DataFrame, window: int) -> pd.DataFrame:
     if window <= 0:
         raise SystemExit("--window must be a positive integer.")
 
+    # Prefer adjusted close to include distributions/splits in return math.
     price_col = "Adj Close" if "Adj Close" in df.columns else "Close"
     if price_col not in df.columns:
         raise SystemExit("Could not find 'Adj Close' or 'Close' in downloaded data.")
@@ -90,8 +91,10 @@ def compute_rf_6m(df: pd.DataFrame, window: int) -> pd.DataFrame:
     working = df[["Date", price_col]].copy()
     working = working.sort_values("Date").reset_index(drop=True)
 
+    # Convert selected price column to float once and reuse.
     px = working[price_col].astype(float)
     working["daily_log_return"] = np.log(px / px.shift(1))
+    # 126 trading days is the standard 6-month approximation used here.
     working["rf_6m_log_raw"] = working["daily_log_return"].rolling(
         window=window, min_periods=window
     ).sum()
@@ -118,6 +121,7 @@ def save_outputs(df: pd.DataFrame, out_dir: Path, make_plot: bool) -> None:
     df.to_csv(csv_path, index=False)
     df.to_excel(xlsx_path, index=False)
 
+    # Persist a one-row latest snapshot for quick downstream consumption.
     last = df.iloc[-1]
     latest_df = pd.DataFrame(
         [
