@@ -1,70 +1,72 @@
 # SGOV 6-Month Risk-Free Proxy
 
-Project for computing a 6-month risk-free return proxy from SGOV ETF prices.
+This project calculates a 6-month risk-free return proxy using SGOV ETF prices. It is a compact fixed-income analytics project showing how short-duration Treasury ETF data can be transformed into a reproducible rolling risk-free rate estimate.
 
-## Stage-by-Stage Method
+The project is educational and does not represent investment advice, a live rate recommendation, or production market data infrastructure.
 
-1. Stage 1 - Data download
-- Pull SGOV daily prices from Yahoo Finance (`yfinance`).
-- Use `Adj Close` when available (fallback: `Close`).
+## What This Project Does
 
-2. Stage 2 - Return calculation
-- Daily log return: `ln(P_t / P_(t-1))`.
-- Rolling 126-trading-day sum (approximately 6 months).
-- Convert back to simple return: `exp(sum_log_returns) - 1`.
-- Clip negative values at `0` to produce the final risk-free proxy.
+- Downloads SGOV daily price data with `yfinance`
+- Uses adjusted close prices when available, with close-price fallback
+- Calculates daily log returns
+- Computes a rolling 126-trading-day return, roughly six months
+- Converts rolling log returns back into simple returns
+- Clips negative values at zero for the final risk-free proxy
+- Exports CSV, Excel, text summary, chart, and PDF report outputs
 
-3. Stage 3 - Output generation
-- Save full results to CSV and Excel.
-- Save latest value summary to TXT and CSV.
-- Optionally save time-series chart as PNG.
+## Methodology
 
-4. Stage 4 - Reporting
-- Print final summary in terminal.
-- Generate a PDF submission report.
+1. Download SGOV daily price data.
+2. Select adjusted close prices where available.
+3. Calculate daily log returns:
+
+```text
+ln(P_t / P_(t-1))
+```
+
+4. Sum log returns over a 126-trading-day window.
+5. Convert the result back to a simple return:
+
+```text
+exp(sum_log_returns) - 1
+```
+
+6. Clip negative values at zero to produce the final proxy.
+
+## Why SGOV
+
+SGOV is used as a short-duration Treasury bill ETF proxy. It is not identical to a Treasury bill curve, SOFR, or a directly observed risk-free rate, but it is a practical public-market proxy for a small educational analytics workflow.
 
 ## Files Included
 
-- `sgov_rf_6m.py` - main computation script with comments and stage logs
-- `build_submission_report.py` - PDF report generator
-- `README.md` - methodology and usage
-- `requirements.txt` - dependencies
-- `sample_output.txt` - captured terminal run output
-- `out/` - generated data outputs
-- `SGOV_Submission_Report.pdf` - final PDF report
+- `sgov_rf_6m.py`: main computation script
+- `build_submission_report.py`: PDF report generator
+- `requirements.txt`: Python dependencies
+- `sample_output.txt`: captured terminal output
+- `out/`: generated data outputs
+- `SGOV_Submission_Report.pdf`: generated report artifact
 
-## Setup
+## How to Run
+
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Run Analysis
+Run the analysis:
 
 ```bash
 python sgov_rf_6m.py --start 2024-01-01 --end 2026-02-12 --window 126 --out out --plot
 ```
 
-## Build PDF Report
+Build the PDF report:
 
 ```bash
 python build_submission_report.py --project-dir . --author "Your Name"
 ```
 
-Optional authorship line customization:
-
-```bash
-python build_submission_report.py --project-dir . --author "Your Name" --declaration "I confirm this code and analysis were prepared by me for course submission."
-```
-
-## Verify Run
-
-```bash
-python sgov_rf_6m.py --start 2024-01-01 --end 2026-02-12 --window 126 --out out --plot
-python build_submission_report.py --project-dir . --author "Your Name"
-```
-
-## Output Files
+## Outputs
 
 - `out/sgov_rf_6m.csv`
 - `out/sgov_rf_6m.xlsx`
@@ -72,3 +74,18 @@ python build_submission_report.py --project-dir . --author "Your Name"
 - `out/rf_latest.csv`
 - `out/sgov_rf_6m.png`
 - `SGOV_Submission_Report.pdf`
+
+## Skills Demonstrated
+
+- Fixed-income proxy construction
+- Rolling return calculations
+- Financial data cleaning
+- Python reporting automation
+- CSV, Excel, chart, and PDF output generation
+
+## Limitations
+
+- SGOV is an ETF proxy, not a direct Treasury bill curve or SOFR series.
+- ETF prices can include market microstructure effects and fund-specific behavior.
+- The 126-trading-day window is an approximation for six months.
+- This is an educational project, not production rate infrastructure.
